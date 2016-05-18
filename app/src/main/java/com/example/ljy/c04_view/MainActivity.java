@@ -2,6 +2,7 @@ package com.example.ljy.c04_view;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -37,50 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Integer> randomNumbs = getRandomNumber();
 
-    ArrayList<TableRow> tableRows = new ArrayList<>();
-    for (int i=0; i < 5; i++) {
-      tableRows.add(new TableRow(this));
-    }
-    int index = 0;
-    for (TableRow tableRow : tableRows) {
-      for (int i = 0; i < 5; i++) {
-        final Button button = new Button(this);
-        final int finalIndex = randomNumbs.get(index++);
-        button.setText(""+finalIndex);
-        button.setOnClickListener(new View.OnClickListener() {
-          int id = finalIndex;
-          @Override
-          public void onClick(View v) {
-            if (selectedCount == id ) {
-//              Toast.makeText(getApplicationContext(), button.getText()+" has clicked! ", Toast.LENGTH_SHORT).show();
-              selectedCount++;
-              button.setClickable(false);
-              button.setBackgroundColor(Color.RED);
-              if (selectedCount == 26) {
-                Toast.makeText(getApplicationContext(), " C L E A R ! ! ! ", Toast.LENGTH_SHORT).show();
-                recreate();
-              }
-            }
-          }
-        });
-        tableRow.addView(button);
-      }
-      tableLayout.addView(tableRow);
-    }
+    createTableRow(tableLayout, randomNumbs);
 
     mainLayout.addView(tableLayout);
 
-
-
-
-//
-//        Button tv1 = (Button) findViewById(R.id.textView1);
-//        tv1.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
   }
 
   public ArrayList<Integer> getRandomNumber() {
@@ -95,4 +56,61 @@ public class MainActivity extends AppCompatActivity {
     }
     return result;
   }
+
+  private void createTableRow(TableLayout tableLayout, ArrayList<Integer> randomNumbs) {
+    ArrayList<TableRow> tableRows = new ArrayList<>();
+    int rowSize = 5;
+    int columnSize = 5;
+
+    addTableRow(tableRows, rowSize);
+
+    int index = 0;
+    for (TableRow tableRow : tableRows) {
+      for (int i = 0; i < columnSize; i++) {
+        addColumn(randomNumbs.get(index), tableRow);
+        index++;
+      }
+      tableLayout.addView(tableRow);
+    }
+  }
+
+  private void addTableRow(ArrayList<TableRow> tableRows, int row) {
+    for (int i=0; i < row; i++) {
+      tableRows.add(new TableRow(this));
+    }
+  }
+
+  private void addColumn(final int finalId, TableRow tableRow) {
+    final Button button = getButton(finalId);
+    tableRow.addView(button);
+  }
+
+  @NonNull
+  private Button getButton(final int finalId) {
+    final Button button = new Button(this);
+    String buttonText = "" + finalId;
+    button.setText(buttonText);
+    button.setOnClickListener(getListener(button, finalId));
+    return button;
+  }
+
+  @NonNull
+  public View.OnClickListener getListener(final Button button, final int finalId) {
+    return new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (selectedCount == finalId ) {
+//              Toast.makeText(getApplicationContext(), button.getText()+" has clicked! ", Toast.LENGTH_SHORT).show();
+          selectedCount++;
+          button.setClickable(false);
+          button.setBackgroundColor(Color.GRAY);
+          if (selectedCount == 26) {
+            Toast.makeText(getApplicationContext(), " C L E A R ! ! ! ", Toast.LENGTH_SHORT).show();
+            recreate();
+          }
+        }
+      }
+    };
+  }
+
 }
