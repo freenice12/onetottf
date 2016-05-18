@@ -17,8 +17,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
   private LinearLayout mainLayout;
@@ -29,6 +27,15 @@ public class MainActivity extends AppCompatActivity {
   private int selectedCount = 1;
   private Random random = new Random();
   private long startTime;
+
+  private Handler timeHandler = new Handler() {
+    @Override
+    public void handleMessage(Message msg) {
+      super.handleMessage(msg);
+      timerView.setText(getTime());
+      timeHandler.sendEmptyMessage(0);
+    }
+  };
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -68,23 +75,13 @@ public class MainActivity extends AppCompatActivity {
 
     Button stopButton = new Button(this);
     stopButton.setText("Stop!");
-    stopButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        stopTimer();
-      }
-    });
+    stopButton.setOnClickListener(getStopButtonListener());
 
     mainLayout.addView(stopButton);
 
     Button resetButton = new Button(this);
     resetButton.setText("Reset!");
-    resetButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        recreate();
-      }
-    });
+    resetButton.setOnClickListener(getResetButtonListener());
 
     mainLayout.addView(resetButton);
 
@@ -146,14 +143,12 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         if (selectedCount == finalId ) {
-//              Toast.makeText(getApplicationContext(), button.getText()+" has clicked! ", Toast.LENGTH_SHORT).show();
           selectedCount++;
           button.setClickable(false);
           button.setBackgroundColor(Color.GRAY);
           if (selectedCount == 26) {
-            Toast.makeText(getApplicationContext(), " C L E A R ! ! ! ", Toast.LENGTH_SHORT).show();
             stopTimer();
-//            recreate();
+            Toast.makeText(getApplicationContext(), " C L E A R ! ! ! ", Toast.LENGTH_SHORT).show();
           }
         }
       }
@@ -172,18 +167,7 @@ public class MainActivity extends AppCompatActivity {
     };
   }
 
-  private boolean STOP;
-  private Handler timeHandler = new Handler() {
-    @Override
-    public void handleMessage(Message msg) {
-      super.handleMessage(msg);
-      timerView.setText(getTime());
-      timeHandler.sendEmptyMessage(0);
-    }
-  };
-
   private void stopTimer() {
-    STOP = true;
     timeHandler.removeMessages(0);
     startButton.setClickable(true);
     startButton.setText("ReStart");
@@ -200,4 +184,25 @@ public class MainActivity extends AppCompatActivity {
 
     return String.format("%02d:%02d:%02d", ell/1000/60, (ell/1000)%60, (ell%1000)/10);
   }
+
+  @NonNull
+  private View.OnClickListener getResetButtonListener() {
+    return new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        recreate();
+      }
+    };
+  }
+
+  @NonNull
+  private View.OnClickListener getStopButtonListener() {
+    return new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        stopTimer();
+      }
+    };
+  }
+
 }
