@@ -165,6 +165,8 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         tableLayout.setVisibility(View.VISIBLE);
+        startButton.setClickable(false);
+        startButton.setText("Running!");
         startTimer();
       }
     };
@@ -183,6 +185,8 @@ public class MainActivity extends AppCompatActivity {
   private void stopTimer() {
     STOP = true;
     timeHandler.removeMessages(0);
+    startButton.setClickable(true);
+    startButton.setText("ReStart");
   }
 
   private void startTimer() {
