@@ -41,18 +41,18 @@ public class MainActivity extends AppCompatActivity {
     for (int i=0; i < 5; i++) {
       tableRows.add(new TableRow(this));
     }
-    int index = 1;
+    int index = 0;
     for (TableRow tableRow : tableRows) {
       for (int i = 0; i < 5; i++) {
         final Button button = new Button(this);
-        final int finalIndex = index;
-        button.setText(""+index++);
+        final int finalIndex = randomNumbs.get(index++);
+        button.setText(""+finalIndex);
         button.setOnClickListener(new View.OnClickListener() {
           int id = finalIndex;
           @Override
           public void onClick(View v) {
             if (selectedCount == id ) {
-              Toast.makeText(getApplicationContext(), button.getText()+" has clicked! / "+random.nextInt(25), Toast.LENGTH_SHORT).show();
+//              Toast.makeText(getApplicationContext(), button.getText()+" has clicked! ", Toast.LENGTH_SHORT).show();
               selectedCount++;
               button.setClickable(false);
               button.setBackgroundColor(Color.RED);
@@ -85,8 +85,14 @@ public class MainActivity extends AppCompatActivity {
 
   public ArrayList<Integer> getRandomNumber() {
     ArrayList<Integer> result = new ArrayList<>();
-
-
+    int index = 0;
+    while (index < 25) {
+      int randomNumber = random.nextInt(25) + 1;
+      if (!result.contains(randomNumber)) {
+        result.add(randomNumber);
+        index++;
+      }
+    }
     return result;
   }
 }
