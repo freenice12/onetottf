@@ -12,11 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
   LinearLayout mainLayout;
 
   private int selectedCount = 1;
+  private Random random = new Random();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     TableLayout tableLayout = new TableLayout(this);
     tableLayout.setShrinkAllColumns(true);
 
+    ArrayList<Integer> randomNumbs = getRandomNumber();
+
     ArrayList<TableRow> tableRows = new ArrayList<>();
     for (int i=0; i < 5; i++) {
       tableRows.add(new TableRow(this));
@@ -48,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
           @Override
           public void onClick(View v) {
             if (selectedCount == id ) {
-//              Toast.makeText(getApplicationContext(), button.getText()+" has clicked!", Toast.LENGTH_SHORT).show();
+              Toast.makeText(getApplicationContext(), button.getText()+" has clicked! / "+random.nextInt(25), Toast.LENGTH_SHORT).show();
               selectedCount++;
               button.setClickable(false);
               button.setBackgroundColor(Color.RED);
@@ -77,5 +81,12 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
+  }
+
+  public ArrayList<Integer> getRandomNumber() {
+    ArrayList<Integer> result = new ArrayList<>();
+
+
+    return result;
   }
 }
