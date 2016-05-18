@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
               button.setClickable(false);
               button.setBackgroundColor(Color.RED);
               if (selectedCount == 26) {
-//                Toast.makeText(getApplicationContext(), " C L E A R ! ! ! ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), " C L E A R ! ! ! ", Toast.LENGTH_SHORT).show();
                 recreate();
               }
             }
